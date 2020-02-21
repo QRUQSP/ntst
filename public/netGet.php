@@ -121,7 +121,11 @@ function qruqsp_ntst_netGet($ciniki) {
             . "qruqsp_ntst_participants.net_id, "
             . "qruqsp_ntst_participants.callsign, "
             . "qruqsp_ntst_participants.flags, "
+            . "qruqsp_ntst_participants.flags AS options, "
             . "qruqsp_ntst_participants.name, "
+            . "qruqsp_ntst_participants.place_of_origin, "
+            . "qruqsp_ntst_participants.address, "
+            . "qruqsp_ntst_participants.phone, "
             . "qruqsp_ntst_participants.email "
             . "FROM qruqsp_ntst_participants "
             . "WHERE qruqsp_ntst_participants.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
@@ -130,7 +134,10 @@ function qruqsp_ntst_netGet($ciniki) {
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
         $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'qruqsp.ntst', array(
             array('container'=>'participants', 'fname'=>'id', 
-                'fields'=>array('id', 'net_id', 'callsign', 'flags', 'name', 'email')),
+                'fields'=>array('id', 'net_id', 'callsign', 'flags', 'options', 'name', 
+                    'place_of_origin', 'address', 'phone', 'email'),
+                'flags'=>array('options'=>$maps['participant']['flags']),
+                ),
             ));
         if( $rc['stat'] != 'ok' ) {
             return $rc;

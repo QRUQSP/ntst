@@ -55,11 +55,13 @@ function qruqsp_ntst_messageAdd(&$ciniki) {
     //
     $strsql = "SELECT participants.callsign, "
         . "participants.name, "
+        . "participants.flags, "
+        . "participants.place_of_origin, "
+        . "participants.phone, "
         . "participants.email, "
         . "nets.id AS net_id, "
         . "nets.name, "
-        . "nets.message_source, "
-        . "nets.place_of_origin "
+        . "nets.message_sources "
         . "FROM qruqsp_ntst_participants AS participants "
         . "INNER JOIN qruqsp_ntst_nets AS nets ON ("
             . "participants.net_id = nets.id "
@@ -76,7 +78,7 @@ function qruqsp_ntst_messageAdd(&$ciniki) {
         return array('stat'=>'fail', 'err'=>array('code'=>'qruqsp.ntst.11', 'msg'=>'Unable to find requested participant'));
     }
     $participant = $rc['participant'];
-    $net_id = $rc['participant']['net_id'];
+    $args['net_id'] = $rc['participant']['net_id'];
 
     $dt = new DateTime('now', new DateTimezone('UTC'));
     if( !isset($args['time_filed']) || $args['time_filed'] == '' ) {
@@ -149,7 +151,7 @@ function qruqsp_ntst_messageAdd(&$ciniki) {
         // Load the messages file specified for th net
         //
         $message_source = 'quotes.csv';
-        if( isset($participant['message_source']) ) {
+        if( isset($participant['message_sources']) ) {
             //
             // FIXME: Add lookup of source
             //
@@ -286,6 +288,7 @@ function qruqsp_ntst_messageAdd(&$ciniki) {
     // Return the details for the net
     //
     ciniki_core_loadMethod($ciniki, 'qruqsp', 'ntst', 'public', 'netGet');
+    $ciniki['request']['args']['net_id'] = $args['net_id'];
     return qruqsp_ntst_netGet($ciniki);
 }
 ?>

@@ -32,7 +32,7 @@ create table qruqsp_ntst_nets (
     status tinyint unsigned not null,
     start_utc datetime not null,
     end_utc datetime not null,
-    message_source varchar(250) not null,
+    message_sources varchar(250) not null,
     date_added datetime not null,
     last_updated datetime not null,
     primary key (id),

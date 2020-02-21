@@ -44,6 +44,7 @@ function qruqsp_ntst_participantSearch($ciniki) {
     //
     $strsql = "SELECT DISTINCT "
         . "qruqsp_ntst_participants.callsign, "
+        . "qruqsp_ntst_participants.flags, "
         . "qruqsp_ntst_participants.name, "
         . "qruqsp_ntst_participants.email "
         . "FROM qruqsp_ntst_participants "
@@ -51,7 +52,7 @@ function qruqsp_ntst_participantSearch($ciniki) {
         . "AND ("
             . "callsign LIKE '" . ciniki_core_dbQuote($ciniki, $args['start_needle']) . "%' "
             . "OR callsign LIKE '% " . ciniki_core_dbQuote($ciniki, $args['start_needle']) . "%' "
-            . "OR callsign REGEXP_LIKE '%[0-9]" . ciniki_core_dbQuote($ciniki, $args['start_needle']) . "%' "
+            . "OR callsign REGEXP '.*[0-9]" . ciniki_core_dbQuote($ciniki, $args['start_needle']) . ".*' "
             . "OR name LIKE '" . ciniki_core_dbQuote($ciniki, $args['start_needle']) . "%' "
             . "OR name LIKE '% " . ciniki_core_dbQuote($ciniki, $args['start_needle']) . "%' "
             . "OR email LIKE '" . ciniki_core_dbQuote($ciniki, $args['start_needle']) . "%' "
@@ -66,7 +67,7 @@ function qruqsp_ntst_participantSearch($ciniki) {
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
     $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'qruqsp.ntst', array(
         array('container'=>'participants', 'fname'=>'callsign', 
-            'fields'=>array('id', 'callsign', 'name', 'place_of_origin', 
+            'fields'=>array('id', 'callsign', 'flags', 'name', 'place_of_origin', 
                 'address', 'phone', 'email')),
         ));
     if( $rc['stat'] != 'ok' ) {

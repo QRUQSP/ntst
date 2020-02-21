@@ -22,6 +22,14 @@ function qruqsp_ntst_maps(&$ciniki) {
             '90' => 'Close',
         ),
     );
+    $maps['participant'] = array(
+        'flags' => array(
+            0x01 => 'Net Control',
+            0x02 => 'Send',
+            0x04 => 'Receive',
+            0x08 => '',
+        ),
+    );
 
     //
     return array('stat'=>'ok', 'maps'=>$maps);
