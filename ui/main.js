@@ -154,8 +154,7 @@ function qruqsp_ntst_main() {
                 case 0: return '<span class="maintext">' + d.callsign + ' - ' + d.name + '</span><span class="subtext">' + d.place_of_origin + '</span>';
                 case 1: return '<span class="maintext">' + d.email + '</span><span class="subtext">' + d.address.replace(/\n/, ', ') + '</span>';
                 case 2: return '<span class="maintext">' + d.options + '</span><span class="subtext">' + d.phone + '</span>';
-                case 3: return '<button onclick="event.stopPropagation(); M.qruqsp_ntst_main.net.newMessage(' + d.id + ');">New Message</button>';
-//                    + ' <button onclick="M.qruqsp_ntst_main.net.removeParticipant(' + d.id + ');">Delete</button>';
+                case 3: return (d.flags&0x02) == 0x02 ? '<button onclick="event.stopPropagation(); M.qruqsp_ntst_main.net.newMessage(' + d.id + ');">New Message</button>' : '';
             }
         }
         if( s == 'messages' ) {
