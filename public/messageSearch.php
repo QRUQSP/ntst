@@ -57,6 +57,7 @@ function qruqsp_ntst_messageSearch($ciniki) {
         . "qruqsp_ntst_messages.phone_number, "
         . "qruqsp_ntst_messages.email, "
         . "qruqsp_ntst_messages.message, "
+        . "qruqsp_ntst_messages.spoken, "
         . "qruqsp_ntst_messages.signature "
         . "FROM qruqsp_ntst_messages "
         . "WHERE qruqsp_ntst_messages.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
@@ -73,7 +74,7 @@ function qruqsp_ntst_messageSearch($ciniki) {
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
     $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'qruqsp.ntst', array(
         array('container'=>'messages', 'fname'=>'id', 
-            'fields'=>array('id', 'participant_id', 'status', 'number', 'precedence', 'hx', 'station_of_origin', 'check_number', 'place_of_origin', 'time_filed', 'date_filed', 'to_name_address', 'phone_number', 'email', 'message', 'signature')),
+            'fields'=>array('id', 'participant_id', 'status', 'number', 'precedence', 'hx', 'station_of_origin', 'check_number', 'place_of_origin', 'time_filed', 'date_filed', 'to_name_address', 'phone_number', 'email', 'message', 'spoken', 'signature')),
         ));
     if( $rc['stat'] != 'ok' ) {
         return $rc;

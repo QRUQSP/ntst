@@ -19,7 +19,7 @@
 # start_date:               The UTC date and time of the start of the net.
 # end_date:                 The UTC date and time of the end of the net.
 #
-# message_source:           The source of the messages, a file in the messages folder.
+# message_sources:          The delimited list of csv files to use.
 #
 # date_added:               The UTC date and time the record was added.
 # last_updated:             The UTC date and time the record was last update.

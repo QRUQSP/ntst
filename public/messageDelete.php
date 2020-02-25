@@ -61,6 +61,8 @@ function qruqsp_ntst_messageDelete(&$ciniki) {
     //
     // Check if any modules are currently using this object
     //
+/*  
+** Ignore any mail messages that have been sent for this message **
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectCheckUsed');
     $rc = ciniki_core_objectCheckUsed($ciniki, $args['tnid'], 'qruqsp.ntst.message', $args['message_id']);
     if( $rc['stat'] != 'ok' ) {
@@ -68,7 +70,7 @@ function qruqsp_ntst_messageDelete(&$ciniki) {
     }
     if( $rc['used'] != 'no' ) {
         return array('stat'=>'fail', 'err'=>array('code'=>'qruqsp.ntst.20', 'msg'=>'The message is still in use. ' . $rc['msg']));
-    }
+    } */
 
     //
     // Start transaction

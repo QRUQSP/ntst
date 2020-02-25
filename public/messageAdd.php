@@ -33,7 +33,8 @@ function qruqsp_ntst_messageAdd(&$ciniki) {
         'to_name_address'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Name/Address'),
         'phone_number'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Phone Number'),
         'email'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Email'),
-        'message'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Message'),
+        'message'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Message'),
+        'spoken'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Spoken'),
         'signature'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Signature'),
         ));
     if( $rc['stat'] != 'ok' ) {
@@ -130,7 +131,7 @@ function qruqsp_ntst_messageAdd(&$ciniki) {
     //
     // Load a message if one is not supplied
     //
-    if( !isset($args['message']) || $args['message'] == '' ) {
+/*    if( !isset($args['message']) || $args['message'] == '' ) {
         //
         // Get the last 3 months or 100 messages MD5's to compare with our message file
         //
@@ -167,7 +168,8 @@ function qruqsp_ntst_messageAdd(&$ciniki) {
             $pieces = explode("::", $line);
             if( is_array($pieces) && count($pieces) > 1 ) {
                 $messages[md5($pieces[0])] = array(
-                    'message' => $pieces[0],
+                    'message' => preg_replace("/\[\[(.*)||.*\]\]/g", "$1", $pieces[0]),
+                    'spoken' => preg_replace("/\[\[.*||(.*)\]\]/g", "$1", $pieces[0]),
                     'signature' => $pieces[1],
                     );
             }
@@ -199,12 +201,12 @@ function qruqsp_ntst_messageAdd(&$ciniki) {
                     if( $k == $hash ) {
                         error_log('found');
                         $next = 'yes';
-/*                        $next_message = next($messages);
-                        if( $next_message === false ) {
-                            error_log('reset');
-                            $next_message = reset($messages);
-                        }
-                        break; */
+//                        $next_message = next($messages);
+//                        if( $next_message === false ) {
+//                            error_log('reset');
+//                            $next_message = reset($messages);
+//                        }
+//                        break;
                     }
                 }
                 
@@ -220,9 +222,10 @@ function qruqsp_ntst_messageAdd(&$ciniki) {
         // Setup the args with the next message
         //
         $args['message'] = $next_message['message'];
+        $args['spoken'] = $next_message['spoken'];
         $args['signature'] = $next_message['signature'];
     }
-
+*/
     if( !isset($args['check_number']) || $args['check_number'] == '' || $args['check_number'] == 0 ) {
         $args['check_number'] = str_word_count($args['message']);
     }

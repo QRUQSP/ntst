@@ -91,6 +91,7 @@ function qruqsp_ntst_messageGet($ciniki) {
             return array('stat'=>'fail', 'err'=>array('code'=>'qruqsp.ntst.11', 'msg'=>'Unable to find requested participant'));
         }
         $participant = $rc['participant'];
+        error_log(print_r($participant, true));
         $net_id = $rc['participant']['net_id'];
 
         //
@@ -98,7 +99,7 @@ function qruqsp_ntst_messageGet($ciniki) {
         //
         $message = array('id'=>0,
             'participant_id'=>(isset($args['participant_id']) ? $args['participant_id'] : ''),
-            'participant_name'=>$participant['callsign'] . ' - ' . $participant['name'],
+            'participant_name'=>$participant['name'] . ' - ' . $participant['callsign'],
             'status'=>'10',
             'number'=>'',
             'precedence'=>'R',
@@ -112,7 +113,8 @@ function qruqsp_ntst_messageGet($ciniki) {
             'phone_number'=>'',
             'email'=>'',
             'message'=>'',
-            'signature'=>'',
+            'spoken'=>'',
+            'signature'=>$participant['name'] . ' - ' . $participant['callsign'],
         );
 
         //
@@ -159,9 +161,9 @@ function qruqsp_ntst_messageGet($ciniki) {
         $available_participants = array();
         if( isset($rc['participants']) && count($rc['participants']) > 0 ) {
             $num_messages = $rc['participants'][0]['num_messages'];
-            foreach($rc['participants'] AS $participant) {
-                if( $participant['num_messages'] == $num_messages ) {
-                    $available_participants[] = $participant;
+            foreach($rc['participants'] AS $p) {
+                if( $p['num_messages'] == $num_messages ) {
+                    $available_participants[] = $p;
                 }
             }
         }
@@ -216,64 +218,70 @@ function qruqsp_ntst_messageGet($ciniki) {
         //
         // Load the messages file specified for th net
         //
-        $message_source = 'quotes.csv';
-        if( isset($participant['message_sources']) ) {
-            //
-            // FIXME: Add lookup of source
-            //
-        }
+        if( isset($participant['message_sources']) && $participant['message_sources'] != '' ) {
+            $files = explode(',', $participant['message_sources']);
 
-        //
-        // Open the messages file, and generate MD5 array
-        //
-        $filename = $ciniki['config']['ciniki.core']['root_dir'] . '/qruqsp-mods/ntst/messages/' . $message_source;
-        $message_file = file($filename);
-        $messages = array();
-        foreach($message_file as $line) {
-            $pieces = explode("::", $line);
-            if( is_array($pieces) && count($pieces) > 1 ) {
-                $messages[md5($pieces[0])] = array(
-                    'message' => $pieces[0],
-                    'signature' => $pieces[1],
-                    );
-            }
-        }
-        if( count($messages) < 2 ) {
-            return array('stat'=>'fail', 'err'=>array('code'=>'qruqsp.ntst.25', 'msg'=>'Message file is empty.'));
-        }
-
-        //
-        // Find the last message sent from this file, so we know what's the next
-        // message to send.  Go through the list of existing md5 hashes in 
-        // descending order from the SQL above to find last one used.
-        //
-        foreach($existing_messages as $hash) {
-            if( isset($messages[$hash]) ) {
-                //
-                // MD5 exists, now find position in array
-                //
-                $next = 'no';
-                foreach($messages as $k => $v) {
-                    if( $next == 'yes' ) {
-                        $next_message = $v;
-                        break;
-                    } 
-                    if( $k == $hash ) {
-                        $next = 'yes';
+            //
+            // Open the messages file, and generate MD5 array
+            //
+            $messages = array();
+            foreach($files as $file) {
+                error_log($file);
+                // Make sure somebody can't submit filename with ../../.. to access file system, remove all not characters/numbers
+                $file = preg_replace('/[^0-9A-Za-z_\-]/', '', $file);
+                $filename = $ciniki['config']['ciniki.core']['root_dir'] . '/qruqsp-mods/ntst/messages/' . $file . '.csv';
+                $message_file = file($filename);
+                foreach($message_file as $line) {
+                    $pieces = explode("::", trim($line));
+                    if( is_array($pieces) && count($pieces) > 0 ) {
+                        $messages[md5($pieces[0])] = array(
+                            'message' => preg_replace("/\[\[(.*)\|\|.*\]\]/", "$1", $pieces[0]),
+                            'spoken' => preg_replace("/\[\[.*\|\|(.*)\]\]/", "$1", $pieces[0]),
+                            'signature' => (isset($pieces[1]) ? $pieces[1] : ''),
+                            );
                     }
                 }
-                break;
+                if( count($messages) < 1 ) {
+                    return array('stat'=>'fail', 'err'=>array('code'=>'qruqsp.ntst.25', 'msg'=>'Message file is empty.'));
+                }
+            }
+
+            //
+            // Find the last message sent from this file, so we know what's the next
+            // message to send.  Go through the list of existing md5 hashes in 
+            // descending order from the SQL above to find last one used.
+            //
+            foreach($existing_messages as $hash) {
+                if( isset($messages[$hash]) ) {
+                    //
+                    // MD5 exists, now find position in array
+                    //
+                    $next = 'no';
+                    foreach($messages as $k => $v) {
+                        if( $next == 'yes' ) {
+                            $next_message = $v;
+                            break;
+                        } 
+                        if( $k == $hash ) {
+                            $next = 'yes';
+                        }
+                    }
+                    break;
+                }
+            }
+            if( !isset($next_message) ) {
+                $next_message = reset($messages);
+            }
+
+            //
+            // Setup the args with the next message
+            //
+            $message['message'] = $next_message['message'];
+            $message['spoken'] = $next_message['spoken'];
+            if( $next_message['signature'] != '' ) {
+                $message['signature'] = $next_message['signature'];
             }
         }
-        if( !isset($next_message) ) {
-            $next_message = reset($messages);
-        }
-
-        //
-        // Setup the args with the next message
-        //
-        $message['message'] = $next_message['message'];
-        $message['signature'] = $next_message['signature'];
     }
 
     //
@@ -295,6 +303,7 @@ function qruqsp_ntst_messageGet($ciniki) {
             . "qruqsp_ntst_messages.phone_number, "
             . "qruqsp_ntst_messages.email, "
             . "qruqsp_ntst_messages.message, "
+            . "qruqsp_ntst_messages.spoken, "
             . "qruqsp_ntst_messages.signature "
             . "FROM qruqsp_ntst_messages "
             . "WHERE qruqsp_ntst_messages.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
@@ -303,7 +312,7 @@ function qruqsp_ntst_messageGet($ciniki) {
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
         $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'qruqsp.ntst', array(
             array('container'=>'messages', 'fname'=>'id', 
-                'fields'=>array('participant_id', 'status', 'number', 'precedence', 'hx', 'station_of_origin', 'check_number', 'place_of_origin', 'time_filed', 'date_filed', 'to_name_address', 'phone_number', 'email', 'message', 'signature'),
+                'fields'=>array('participant_id', 'status', 'number', 'precedence', 'hx', 'station_of_origin', 'check_number', 'place_of_origin', 'time_filed', 'date_filed', 'to_name_address', 'phone_number', 'email', 'message', 'spoken', 'signature'),
                 ),
             ));
         if( $rc['stat'] != 'ok' ) {

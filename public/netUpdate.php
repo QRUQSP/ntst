@@ -23,6 +23,7 @@ function qruqsp_ntst_netUpdate(&$ciniki) {
         'start_utc_time'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Start Time'),
         'end_utc_date'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'End Date'),
         'end_utc_time'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'End Time'),
+        'message_sources'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Message Sources'),
         ));
     if( $rc['stat'] != 'ok' ) {
         return $rc;
@@ -58,10 +59,10 @@ function qruqsp_ntst_netUpdate(&$ciniki) {
         array('container'=>'nets', 'fname'=>'id', 
             'fields'=>array('name', 'status', 'start_utc_date', 'start_utc_time', 'end_utc_date', 'end_utc_time',),
             'utctotz'=>array(
-                'start_utc_date'=>array('timezone'=>'UTC', 'Y-m-d'),
-                'start_utc_time'=>array('timezone'=>'UTC', 'H:i:s'),
-                'end_utc_date'=>array('timezone'=>'UTC', 'Y-m-d'),
-                'end_utc_time'=>array('timezone'=>'UTC', 'H:i:s'),
+                'start_utc_date'=>array('timezone'=>'UTC', 'format'=>'Y-m-d'),
+                'start_utc_time'=>array('timezone'=>'UTC', 'format'=>'H:i:s'),
+                'end_utc_date'=>array('timezone'=>'UTC', 'format'=>'Y-m-d'),
+                'end_utc_time'=>array('timezone'=>'UTC', 'format'=>'H:i:s'),
                 ),
             ),
         ));

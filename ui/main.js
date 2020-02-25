@@ -265,6 +265,9 @@ function qruqsp_ntst_main() {
             'start_utc_time':{'label':'Start Time', 'required':'yes', 'type':'text', 'size':'small'},
             'end_utc_date':{'label':'End Date', 'required':'yes', 'type':'date', 'hint':'UTC'},
             'end_utc_time':{'label':'End Time', 'required':'yes', 'type':'text', 'size':'small'},
+//            }},
+//        'messages':{'label':'Message Files', 'fields':{
+            'message_sources':{'label':'Messages', 'type':'toggle', 'none':'yes', 'toggles':{'jokes':'Jokes', 'quotes':'Quotes', 'samples':'Sample Messages'}},
             }},
         '_buttons':{'label':'', 'buttons':{
             'save':{'label':'Save', 'fn':'M.qruqsp_ntst_main.edit.save();'},
@@ -475,6 +478,7 @@ function qruqsp_ntst_main() {
             }},
         '_message':{'label':'', 'fields':{
             'message':{'label':'Message', 'type':'textarea'},
+            'spoken':{'label':'Spoken', 'type':'textarea'},
             'signature':{'label':'Signature', 'type':'text'},
             }},
         '_buttons':{'label':'', 'buttons':{

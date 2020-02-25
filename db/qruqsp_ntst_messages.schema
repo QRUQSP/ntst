@@ -29,6 +29,7 @@
 # email:                    The email address of the recipient.
 #
 # message:                  The message content which must be broken down into proper radio gram format.
+# spoken:                   The spoken message content which contains any extra spoken words.
 #
 # signature:                The person who signed to authorize message.
 #
@@ -53,6 +54,7 @@ create table qruqsp_ntst_messages (
     phone_number varchar(150) not null,
     email varchar(250) not null,
     message varchar(250) not null,
+    spoken varchar(250) not null,
     signature varchar(250) not null,
     date_added datetime not null,
     last_updated datetime not null,

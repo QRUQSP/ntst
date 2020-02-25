@@ -88,7 +88,8 @@ function qruqsp_ntst_netGet($ciniki) {
             . "qruqsp_ntst_nets.start_utc AS start_utc_date, "
             . "qruqsp_ntst_nets.start_utc AS start_utc_time, "
             . "qruqsp_ntst_nets.end_utc AS end_utc_date, "
-            . "qruqsp_ntst_nets.end_utc AS end_utc_time "
+            . "qruqsp_ntst_nets.end_utc AS end_utc_time, "
+            . "qruqsp_ntst_nets.message_sources "
             . "FROM qruqsp_ntst_nets "
             . "WHERE qruqsp_ntst_nets.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND qruqsp_ntst_nets.id = '" . ciniki_core_dbQuote($ciniki, $args['net_id']) . "' "
@@ -96,7 +97,8 @@ function qruqsp_ntst_netGet($ciniki) {
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
         $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'qruqsp.ntst', array(
             array('container'=>'nets', 'fname'=>'id', 
-                'fields'=>array('name', 'status', 'status_text', 'start_utc_date', 'start_utc_time', 'end_utc_date', 'end_utc_time',),
+                'fields'=>array('name', 'status', 'status_text', 
+                    'start_utc_date', 'start_utc_time', 'end_utc_date', 'end_utc_time', 'message_sources'),
                 'maps'=>array('status_text'=>$maps['net']['status']),
                 'utctotz'=>array(
                     'start_utc_date'=>array('timezone'=>'UTC', 'format'=>$date_format),

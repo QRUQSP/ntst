@@ -26,6 +26,7 @@ function qruqsp_ntst_netAdd(&$ciniki) {
         'start_utc_time'=>array('required'=>'yes', 'blank'=>'yes', 'name'=>'Start Time'),
         'end_utc_date'=>array('required'=>'yes', 'blank'=>'yes', 'name'=>'End Date'),
         'end_utc_time'=>array('required'=>'yes', 'blank'=>'yes', 'name'=>'End Time'),
+        'message_sources'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Message Sources'),
         ));
     if( $rc['stat'] != 'ok' ) {
         return $rc;

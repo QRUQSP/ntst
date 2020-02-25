@@ -31,6 +31,7 @@ function qruqsp_ntst_messageUpdate(&$ciniki) {
         'phone_number'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Phone Number'),
         'email'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Email'),
         'message'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Message'),
+        'spoken'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Spoken'),
         'signature'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Signature'),
         ));
     if( $rc['stat'] != 'ok' ) {

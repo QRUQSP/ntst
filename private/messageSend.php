@@ -32,6 +32,7 @@ function qruqsp_ntst_messageSend(&$ciniki, $tnid, $message_id) {
         . "qruqsp_ntst_messages.phone_number, "
         . "qruqsp_ntst_messages.email AS to_email, "
         . "qruqsp_ntst_messages.message, "
+        . "qruqsp_ntst_messages.spoken, "
         . "qruqsp_ntst_messages.signature, "
         . "participants.callsign, "
         . "participants.name, "
@@ -56,7 +57,7 @@ function qruqsp_ntst_messageSend(&$ciniki, $tnid, $message_id) {
                 'number', 'precedence', 'hx', 'station_of_origin', 'check_number', 
                 'place_of_origin', 'time_filed', 'date_filed', 
                 'to_name_address', 'phone_number', 'to_email', 
-                'message', 'signature'),
+                'message', 'spoken', 'signature'),
             ),
         ));
     if( $rc['stat'] != 'ok' ) {
@@ -96,6 +97,11 @@ function qruqsp_ntst_messageSend(&$ciniki, $tnid, $message_id) {
     }
     $content .= "\n";
     $content .= "Signature: " . $message['signature'] . "\n";
+    if( $message['message'] != $message['spoken'] ) {
+        $content .= "\n";
+        $content .= "Message is spoken as follows:\n";
+        $content .= $message['spoken'] . "\n";
+    }
 
     //
     // Add message to mail queue

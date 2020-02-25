@@ -70,6 +70,7 @@ function qruqsp_ntst_objects(&$ciniki) {
             'phone_number' => array('name'=>'Phone Number', 'default'=>''),
             'email' => array('name'=>'Email', 'default'=>''),
             'message' => array('name'=>'Message', 'default'=>''),
+            'spoken' => array('name'=>'Spoken', 'default'=>''),
             'signature' => array('name'=>'Signature', 'default'=>''),
             ),
         'history_table' => 'qruqsp_ntst_history',
