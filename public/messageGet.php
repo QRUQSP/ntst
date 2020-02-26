@@ -91,7 +91,6 @@ function qruqsp_ntst_messageGet($ciniki) {
             return array('stat'=>'fail', 'err'=>array('code'=>'qruqsp.ntst.11', 'msg'=>'Unable to find requested participant'));
         }
         $participant = $rc['participant'];
-        error_log(print_r($participant, true));
         $net_id = $rc['participant']['net_id'];
 
         //

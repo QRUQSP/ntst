@@ -483,6 +483,9 @@ function qruqsp_ntst_main() {
             }},
         '_buttons':{'label':'', 'buttons':{
             'save':{'label':'Send', 'fn':'M.qruqsp_ntst_main.message.save();'},
+            'download':{'label':'Download', 
+                'visible':function() {return M.qruqsp_ntst_main.message.message_id > 0 ? 'yes' : 'no'; },
+                'fn':'M.qruqsp_ntst_main.message.download();'},
             'delete':{'label':'Delete', 
                 'visible':function() {return M.qruqsp_ntst_main.message.message_id > 0 ? 'yes' : 'no'; },
                 'fn':'M.qruqsp_ntst_main.message.remove();'},
@@ -491,6 +494,9 @@ function qruqsp_ntst_main() {
     this.message.fieldValue = function(s, i, d) { return this.data[i]; }
     this.message.fieldHistoryArgs = function(s, i) {
         return {'method':'qruqsp.ntst.messageHistory', 'args':{'tnid':M.curTenantID, 'message_id':this.message_id, 'field':i}};
+    }
+    this.message.download = function() {
+        M.api.openPDF('qruqsp.ntst.radiogramPDF', {'tnid':M.curTenantID, 'message_id':this.message_id});
     }
     this.message.open = function(cb, mid, pid, list) {
         if( mid != null ) { this.message_id = mid; }
