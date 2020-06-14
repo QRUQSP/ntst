@@ -78,6 +78,6 @@ function qruqsp_ntst_participantSearch($ciniki) {
     }
     $participants = isset($rc['participants']) ? $rc['participants'] : array();
 
-    return array('stat'=>'ok', 'participants'=>$participants, 'nplist'=>$participant_ids);
+    return array('stat'=>'ok', 'participants'=>$participants);
 }
 ?>
