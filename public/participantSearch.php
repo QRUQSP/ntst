@@ -46,6 +46,9 @@ function qruqsp_ntst_participantSearch($ciniki) {
         . "qruqsp_ntst_participants.callsign, "
         . "qruqsp_ntst_participants.flags, "
         . "qruqsp_ntst_participants.name, "
+        . "qruqsp_ntst_participants.place_of_origin, "
+        . "qruqsp_ntst_participants.address, "
+        . "qruqsp_ntst_participants.phone, "
         . "qruqsp_ntst_participants.email "
         . "FROM qruqsp_ntst_participants "
         . "WHERE qruqsp_ntst_participants.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
@@ -67,22 +70,13 @@ function qruqsp_ntst_participantSearch($ciniki) {
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
     $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'qruqsp.ntst', array(
         array('container'=>'participants', 'fname'=>'callsign', 
-            'fields'=>array('id', 'callsign', 'flags', 'name', 'place_of_origin', 
+            'fields'=>array('callsign', 'flags', 'name', 'place_of_origin', 
                 'address', 'phone', 'email')),
         ));
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
-    if( isset($rc['participants']) ) {
-        $participants = $rc['participants'];
-        $participant_ids = array();
-        foreach($participants as $iid => $participant) {
-            $participant_ids[] = $participant['id'];
-        }
-    } else {
-        $participants = array();
-        $participant_ids = array();
-    }
+    $participants = isset($rc['participants']) ? $rc['participants'] : array();
 
     return array('stat'=>'ok', 'participants'=>$participants, 'nplist'=>$participant_ids);
 }

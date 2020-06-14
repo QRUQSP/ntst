@@ -135,12 +135,13 @@ function qruqsp_ntst_main() {
         return d.callsign + ' - ' + d.name;
     }
     this.net.liveSearchResultRowFn = function(s, f, i, j, d) {
-        return 'M.qruqsp_ntst_main.net.fillForm(i);';
+        return 'M.qruqsp_ntst_main.net.fillForm(\'' + s + '\',\'' + i + '\');';
     }
-    this.net.fillForm = function(idx) {
+    this.net.fillForm = function(s,idx) {
         for(var i in this.sections.add.fields) {
             this.setFieldValue(i, this.searchData[idx][i]);
         }
+        this.clearLiveSearches(s,i);
     }
     this.net.cellValue = function(s, i, j, d) {
         if( s == 'details' ) {

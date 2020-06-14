@@ -225,7 +225,6 @@ function qruqsp_ntst_messageGet($ciniki) {
             //
             $messages = array();
             foreach($files as $file) {
-                error_log($file);
                 // Make sure somebody can't submit filename with ../../.. to access file system, remove all not characters/numbers
                 $file = preg_replace('/[^0-9A-Za-z_\-]/', '', $file);
                 $filename = $ciniki['config']['ciniki.core']['root_dir'] . '/qruqsp-mods/ntst/messages/' . $file . '.csv';

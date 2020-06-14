@@ -183,11 +183,8 @@ function qruqsp_ntst_messageAdd(&$ciniki) {
         // message to send.  Go through the list of existing md5 hashes in 
         // descending order from the SQL above to find last one used.
         //
-//        error_log(print_r(array_keys($messages), true));
         foreach($existing_messages as $hash) {
-            error_log($hash);
             if( isset($messages[$hash]) ) {
-                error_log('exists');
                 //
                 // MD5 exists, now find position in array
                 //
@@ -197,13 +194,10 @@ function qruqsp_ntst_messageAdd(&$ciniki) {
                         $next_message = $v;
                         break;
                     } 
-                    error_log('checking: ' . $k);
                     if( $k == $hash ) {
-                        error_log('found');
                         $next = 'yes';
 //                        $next_message = next($messages);
 //                        if( $next_message === false ) {
-//                            error_log('reset');
 //                            $next_message = reset($messages);
 //                        }
 //                        break;
@@ -214,7 +208,6 @@ function qruqsp_ntst_messageAdd(&$ciniki) {
             }
         }
         if( !isset($next_message) ) {
-            error_log('reset2');
             $next_message = reset($messages);
         }
 
