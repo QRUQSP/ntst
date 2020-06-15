@@ -117,7 +117,7 @@ function qruqsp_ntst_templates_radiogram(&$ciniki, $tnid, $args) {
     $pdf->setXY(39, 44);
     $pdf->Cell(21, 6, $message['precedence'], 0, false, 'C');
     $pdf->setXY(60, 44);
-    $pdf->Cell(6.5, 6, $message['hs'], 0, false, 'C');
+    $pdf->Cell(6.5, 6, $message['hx'], 0, false, 'C');
     $pdf->setXY(66.5, 44);
     $pdf->Cell(29, 6, $message['station_of_origin'], 0, false, 'C');
     $pdf->setXY(95.5, 44);
